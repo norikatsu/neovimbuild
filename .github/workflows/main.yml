@@ -1,0 +1,3 @@
+- uses: rhysd/action-setup-vim@v1
+  with:
+    neovim: true
