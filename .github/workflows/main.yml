@@ -1,5 +1,14 @@
 name: learn-github-actions
 on: [push]
+
+on: 
+  workflow_dispatch:
+    inputs:
+      Manual_Execution_Sample:
+        description: 'Sample for Manual Execution'
+        required: true
+        default: 'defalut'
+
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
@@ -7,3 +16,4 @@ jobs:
       - uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
+      - run: ls ~
