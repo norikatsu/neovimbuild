@@ -5,6 +5,7 @@ on:
       - edited
 jobs:
   check-bats-version:
+    runs-on: ubuntu-latest
     steps:
       - uses: rhysd/action-setup-vim@v1
         with:
