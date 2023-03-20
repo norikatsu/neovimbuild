@@ -1,3 +1,7 @@
-- uses: rhysd/action-setup-vim@v1
-  with:
-    neovim: true
+name: learn-github-actions
+jobs:
+  check-bats-version:
+    steps:
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
