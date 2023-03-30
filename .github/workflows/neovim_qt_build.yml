@@ -24,20 +24,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout neovim-qt Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: equalsraf/neovim-qt
           ref: v0.2.17
-      - name: Trigger neovim-qt WorkFlow
-        uses: peter-evans/trigger-workflow@v2
-        with:
-          workflow: build-test.yml
-          ref: v0.2.17
-          repository: equalsraf/neovim-qt
-      - name: Save Build Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifact
-          path: path/to/build/artifact
-
+#      - name: Trigger neovim-qt WorkFlow
+#        uses: peter-evans/trigger-workflow@v2
+#        with:
+#          workflow: build-test.yml
+#          ref: v0.2.17
+#          repository: equalsraf/neovim-qt
+#      - name: Save Build Artifact
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: build-artifact
+#          path: path/to/build/artifact
       - run: ls ~
