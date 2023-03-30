@@ -1,0 +1,20 @@
+# Workflow for generating binaries with reference to neovim-qt
+
+name: build-neovimQt-actions
+
+on: 
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Manual Workflow'
+        required: true
+        default: 'defalut'
+
+jobs:
+  clone_and_buile_neovimQt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+      - run: ls ~
