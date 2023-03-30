@@ -28,6 +28,7 @@ jobs:
         with:
           repository: equalsraf/neovim-qt
           ref: v0.2.17
+          path: 'neovim-qt'
 #      - name: Trigger neovim-qt WorkFlow
 #        uses: peter-evans/trigger-workflow@v2
 #        with:
@@ -40,4 +41,5 @@ jobs:
 #          name: build-artifact
 #          path: path/to/build/artifact
       - run: ls ~
-      - run: ls ~/work/neovimbuild/neovimbuild
+      - run: ls ~/work
+      - run: ls ~/work/neovimbuild
