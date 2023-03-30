@@ -40,3 +40,4 @@ jobs:
 #          name: build-artifact
 #          path: path/to/build/artifact
       - run: ls ~
+      - run: ls ~/work/neovimbuild/neovimbuild
