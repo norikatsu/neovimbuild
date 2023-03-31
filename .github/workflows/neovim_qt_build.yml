@@ -21,7 +21,8 @@ on:
 
 jobs:
   clone_and_buile_neovimQt:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout neovim-qt Repository
         uses: actions/checkout@v3
