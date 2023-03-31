@@ -25,10 +25,10 @@ jobs:
     steps:
       - name: Checkout neovim-qt Repository
         uses: actions/checkout@v3
-        with:
-          repository: equalsraf/neovim-qt
-          ref: v0.2.17
-          path: 'neovim-qt'
+        ## with:
+        ##   repository: equalsraf/neovim-qt
+        ##   ref: v0.2.17
+        ##   path: 'neovim-qt'
 #      - name: Trigger neovim-qt WorkFlow
 #        uses: peter-evans/trigger-workflow@v2
 #        with:
@@ -40,17 +40,11 @@ jobs:
 #        with:
 #          name: build-artifact
 #          path: path/to/build/artifact
-      - run: ls ~
-      - run: ls ~/work
-      - run: ls ~/work/neovimbuild
-      - run: ls ~/work/neovimbuild/neovimbuild
-      - run: ls ~/work/neovimbuild/neovimbuild/neovim-qt
+        run: |
+          echo {{github.workspace}}
+          echo {{github.repository}}
+          ls ~/work
+          ls ~/work/neovimbuild
+          ls ~/work/neovimbuild/neovimbuild
+          ls ~/work/neovimbuild/neovimbuild/neovim-qt
 
-
-      - run: |
-        echo {{github.workspace}}
-        echo {{github.repository}}
-        ls ~/work
-        ls ~/work/neovimbuild
-        ls ~/work/neovimbuild/neovimbuild
-        ls ~/work/neovimbuild/neovimbuild/neovim-qt
