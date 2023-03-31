@@ -30,17 +30,72 @@ jobs:
           ref: v0.2.17
 #          path: 'neovim-qt'
 
-#      - name: Trigger neovim-qt WorkFlow
-#        uses: peter-evans/trigger-workflow@v2
-#        with:
-#          workflow: build-test.yml
-#          ref: v0.2.17
-#          repository: equalsraf/neovim-qt
-#      - name: Save Build Artifact
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: build-artifact
-#          path: path/to/build/artifact
+      - name: Linux - Setup
+        run: |
+          sudo add-apt-repository -y ppa:neovim-ppa/stable
+          sudo apt-get install -y neovim ninja-build libqt5svg5 libqt5svg5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+          sudo apt-get update -y
+
+      ## for Windows Only ??
+      ##- name: Qt Cache Restore
+      ##  if: ${{ matrix.qtver }}
+      ##  id: cache-qt
+      ##  uses: actions/cache@v2
+      ##  with:
+      ##    path: ${{ matrix.qtver }}\${{ matrix.qtdir }}
+      ##    key: qt-${{ runner.os }}-${{ matrix.qtver }}-${{ matrix.qtdir }}
+
+      ##- name: Qt Cache Install
+      ##  if: ${{ matrix.qtver && steps.cache-qt.outputs.cache-hit != 'true' }}
+      ##  run: |
+      ##    pip install aqtinstall
+      ##    python -m aqt install ${{ matrix.qtver }} ${{ matrix.qtstr }}
+
+      # Build and Test
+      - name: Neovim Version
+        run: nvim --version
+
+      - name: Configure
+        env:
+          CMAKE_BUILD_TYPE: Release
+          CMAKE_GENERATOR:  Ninja
+        run: >
+          cmake -B ./build
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=c++
+          -DENABLE_TESTS=ON
+          -DCTEST_EXE_ARGS=
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build
+
+      - name: Test
+        uses: GabrielBB/xvfb-action@v1 # Required by Linux, no X11 $DISPLAY
+        with:
+          working-directory: ${{ github.workspace }}/build
+          run: ctest --output-on-failure -C Release
+
+      # Deploy Release Binaries
+      - name: Linux - Publish
+        env:
+          ARCH: x86_64
+        run: |
+          cmake --build ./build --target install
+          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+          chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+          ./linuxdeployqt-continuous-x86_64.AppImage ./install/share/applications/nvim-qt.desktop -appimage -qmake=/usr/lib/qt5/bin/qmake
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Linux_Release
+          if-no-files-found: ignore
+          path: |
+            Neovim-Qt-*-x86_64.AppImage
+            neovim-qt.dmg
+            neovim-qt-installer.msi
+            neovim-qt.zip
 
       - name: Post Command Exe
         run: |
@@ -53,3 +108,18 @@ jobs:
           ls -a ${{github.workspace}}
           echo ${{github.repository}}
 
+
+
+################  GPT sample.... but Err version...
+
+#      - name: Trigger neovim-qt WorkFlow
+#        uses: peter-evans/trigger-workflow@v2
+#        with:
+#          workflow: build-test.yml
+#          ref: v0.2.17
+#          repository: equalsraf/neovim-qt
+#      - name: Save Build Artifact
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: build-artifact
+#          path: path/to/build/artifact
