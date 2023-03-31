@@ -42,10 +42,12 @@ jobs:
 #          name: build-artifact
 #          path: path/to/build/artifact
       - run: |
+          pwd
           ls -a ~/
           ls ~/work/neovimbuild
           ls -a ~/work/neovimbuild/neovimbuild
           echo "MACRO"
+          ## ${{github.workspace}} == /home/runner/work/RIPO_NAME/RIPO_NAME 
           ls -a ${{github.workspace}}
           echo ${{github.repository}}
 
