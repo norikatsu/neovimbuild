@@ -48,5 +48,5 @@ jobs:
       - run: echo ${{github.workspace}}
       - run: echo ${{github.repository}}
       - run: |
-        ls -a ~/
+          ls -a ~/
 
