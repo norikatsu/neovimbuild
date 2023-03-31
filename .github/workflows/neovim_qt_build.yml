@@ -49,4 +49,8 @@ jobs:
       - run: echo ${{github.repository}}
       - run: |
           ls -a ~/
+          ls ~/work/neovimbuild
+          ls -a ~/work/neovimbuild/neovimbuild
+          echo ${{github.workspace}}
+          echo ${{github.repository}}
 
