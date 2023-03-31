@@ -41,7 +41,9 @@ jobs:
 #        with:
 #          name: build-artifact
 #          path: path/to/build/artifact
-      - run: |
+
+      - name: Post Command Exe
+        run: |
           pwd
           ls -a ~/
           ls ~/work/neovimbuild
