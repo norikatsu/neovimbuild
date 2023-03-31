@@ -40,10 +40,17 @@ jobs:
 #        with:
 #          name: build-artifact
 #          path: path/to/build/artifact
-      - run: ls ~/work
+#      - run: ls ~/work
           ## ls ~/work/neovimbuild
           ## ls ~/work/neovimbuild/neovimbuild
           ## ls ~/work/neovimbuild/neovimbuild/neovim-qt
           ##echo {{github.workspace}}
           ##echo {{github.repository}}
+        run: |
+          ls ~/work
+          ls ~/work/neovimbuild/neovimbuild
+          ls ~/work/neovimbuild/neovimbuild/neovim-qt
+          echo {{github.workspace}}
+          echo {{github.repository}}
+
 
