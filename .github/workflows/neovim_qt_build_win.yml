@@ -1,0 +1,128 @@
+# Workflow for generating binaries with reference to neovim-qt
+
+name: build-neovimQt-windows
+
+on: 
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Manual Workflow Build Win'
+        required: true
+        default: 'defalut'
+
+
+##  qtver: 5.15.2
+##  qtdir: msvc2019_64
+##  qtstr: windows desktop win64_msvc2019_64
+
+jobs:
+  clone_and_buile_neovimQt:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout neovim-qt Repository
+        uses: actions/checkout@v3
+        with:
+          repository: equalsraf/neovim-qt
+          ref: v0.2.17
+#          path: 'neovim-qt'
+
+      - name: Windows - Setup
+        env:
+          QT_DIR: ${{ github.workspace }}\5.15.2\msvc2019_64
+        run: |
+          New-Item -Path .\build -Name "build" -ItemType "directory"
+          Invoke-WebRequest https://github.com/neovim/neovim/releases/download/nightly/nvim-win64.zip -OutFile nvim-win64.zip
+          Expand-Archive -Path nvim-win64.zip -DestinationPath .\build\
+          Add-Content -Path $env:GITHUB_PATH -Value ${{ github.workspace }}\build\nvim-win64\bin\
+          Add-Content -Path $env:GITHUB_ENV -Value "CMAKE_PREFIX_PATH=$env:QT_DIR;$env:QT_DIR\lib\cmake"
+          Add-Content -Path $env:GITHUB_PATH -Value "${{ env.qt_dir }}"
+          Add-Content -Path $env:GITHUB_PATH -Value "${{ env.qt_dir }}\bin"
+
+      ## for Windows Only ??
+      - name: Qt Cache Restore
+        id: cache-qt
+        uses: actions/cache@v2
+        with:
+          path: 5.15.2\msvc2019_64
+          key: qt-${{ runner.os }}-5.15.2-msvc2019_64
+
+      - name: Qt Cache Install
+        run: |
+          pip install aqtinstall
+          python -m aqt install 5.15.2 windows desktop win64_msvc2019_64
+
+      # Build and Test
+      - name: Neovim Version
+        run: nvim --version
+
+
+      - name: Configure
+        env:
+          CMAKE_BUILD_TYPE: Release
+          CMAKE_GENERATOR: Visual Studio 17 2022
+        run: >
+          cmake -B ./build
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
+          -DCMAKE_C_COMPILER=
+          -DCMAKE_CXX_COMPILER=
+          -DENABLE_TESTS=ON
+          -DCTEST_EXE_ARGS=-tap
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build
+
+      - name: Test
+        uses: GabrielBB/xvfb-action@v1 # Required by Linux, no X11 $DISPLAY
+        with:
+          working-directory: ${{ github.workspace }}/build
+          run: ctest --output-on-failure -C Release
+
+
+      # Deploy Release Binaries
+      - name: Windows - Publish
+        run: |
+          cmake --build ./build --target install
+          Push-Location ${{ github.workspace }}/build
+          cpack --verbose -G WIX
+          Pop-Location
+          Compress-Archive -Path ./install -DestinationPath neovim-qt.zip
+          Move-Item -Path ./build/neovim-qt-installer.msi -Destination neovim-qt-installer.msi
+
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Linux_Release
+          if-no-files-found: ignore
+          path: |
+            Neovim-Qt-*-x86_64.AppImage
+            neovim-qt.dmg
+            neovim-qt-installer.msi
+            neovim-qt.zip
+
+      - name: Post Command Exe
+        run: |
+          pwd
+          ls -a ~/
+          ls ~/work/neovimbuild
+          ls -a ~/work/neovimbuild/neovimbuild
+          echo "MACRO"
+          ## ${{github.workspace}} == /home/runner/work/RIPO_NAME/RIPO_NAME 
+          ls -a ${{github.workspace}}
+          echo ${{github.repository}}
+
+
+
+################  GPT sample.... but Err version...
+
+#      - name: Trigger neovim-qt WorkFlow
+#        uses: peter-evans/trigger-workflow@v2
+#        with:
+#          workflow: build-test.yml
+#          ref: v0.2.17
+#          repository: equalsraf/neovim-qt
+#      - name: Save Build Artifact
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: build-artifact
+#          path: path/to/build/artifact
