@@ -45,3 +45,12 @@ jobs:
       - run: ls ~/work/neovimbuild
       - run: ls ~/work/neovimbuild/neovimbuild
       - run: ls ~/work/neovimbuild/neovimbuild/neovim-qt
+
+
+      - run: |
+        echo {{github.workspace}}
+        echo {{github.repository}}
+        ls ~/work
+        ls ~/work/neovimbuild
+        ls ~/work/neovimbuild/neovimbuild
+        ls ~/work/neovimbuild/neovimbuild/neovim-qt
