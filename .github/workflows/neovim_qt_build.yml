@@ -47,4 +47,6 @@ jobs:
         #      - run: ls ~/work/neovimbuild/neovimbuild/neovim-qt
       - run: echo ${{github.workspace}}
       - run: echo ${{github.repository}}
+      - run: |
+        ls -a ~/
 
