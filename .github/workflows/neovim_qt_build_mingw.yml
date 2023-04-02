@@ -43,7 +43,7 @@ jobs:
 
       - name: Windows - Setup
         env:
-          QT_DIR: ${{ github.workspace }}\5.15.2\msvc2019_64
+          QT_DIR: ${{ github.workspace }}\5.15.2\mingw81_64
         run: |
           New-Item -Path .\build -Name "build" -ItemType "directory"
           Invoke-WebRequest https://github.com/neovim/neovim/releases/download/nightly/nvim-win64.zip -OutFile nvim-win64.zip
