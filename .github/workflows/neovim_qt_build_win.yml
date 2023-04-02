@@ -101,16 +101,16 @@ jobs:
             neovim-qt-installer.msi
             neovim-qt.zip
 
-      - name: Post Command Exe
-        run: |
-          pwd
-          ls -a ~/
-          ls ~/work/neovimbuild
-          ls -a ~/work/neovimbuild/neovimbuild
-          echo "MACRO"
-          ## ${{github.workspace}} == /home/runner/work/RIPO_NAME/RIPO_NAME 
-          ls -a ${{github.workspace}}
-          echo ${{github.repository}}
+#     - name: Post Command Exe
+#       run: |
+#         pwd
+#         ls -a ~/
+#         ls ~/work/neovimbuild
+#         ls -a ~/work/neovimbuild/neovimbuild
+#         echo "MACRO"
+#         ## ${{github.workspace}} == /home/runner/work/RIPO_NAME/RIPO_NAME 
+#         ls -a ${{github.workspace}}
+#         echo ${{github.repository}}
 
 
 
