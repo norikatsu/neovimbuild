@@ -1,6 +1,12 @@
 # Workflow for generating binaries with reference to neovim-qt
 
-name: build-neovimQt-windows
+
+# Node.js 12 actions are deprecated. Please update the following actions to use Node.js 16: actions/cache@v2, GabrielBB/xvfb-action@v1.
+# For more information see: https://github.blog/changelog/2022-09-22-github-actions-all-actions-will-begin-running-on-node16-instead-of-node12/.
+
+
+
+name: build-neovimQt-MinGW
 
 on: 
   workflow_dispatch:
@@ -11,9 +17,18 @@ on:
         default: 'defalut'
 
 
-##  qtver: 5.15.2
-##  qtdir: msvc2019_64
-##  qtstr: windows desktop win64_msvc2019_64
+## - name: Windows_MingGW
+##   flavor: Debug
+##   runner: windows-2022
+##   generator: MinGW Makefiles
+##   qtver: 5.15.2
+##   qtdir: mingw81_64
+##   qtstr: windows desktop win64_mingw81
+##   cc: gcc
+##   cxx: g++
+##   ctest_exe_args: -tap
+
+
 
 jobs:
   clone_and_buile_neovimQt:
@@ -28,7 +43,7 @@ jobs:
 
       - name: Windows - Setup
         env:
-          QT_DIR: ${{ github.workspace }}\5.15.2\msvc2019_64
+          QT_DIR: ${{ github.workspace }}\5.15.2\mingw81_64
         run: |
           New-Item -Path .\build -Name "build" -ItemType "directory"
           Invoke-WebRequest https://github.com/neovim/neovim/releases/download/nightly/nvim-win64.zip -OutFile nvim-win64.zip
@@ -43,13 +58,15 @@ jobs:
         id: cache-qt
         uses: actions/cache@v2
         with:
-          path: 5.15.2\msvc2019_64
-          key: qt-${{ runner.os }}-5.15.2-msvc2019_64
+          path: 5.15.2\mingw81_64
+          key: qt-${{ runner.os }}-5.15.2-mingw81_64
 
       - name: Qt Cache Install
         run: |
           pip install aqtinstall
-          python -m aqt install 5.15.2 windows desktop win64_msvc2019_64
+          python -m aqt install 5.15.2 windows desktop win64_mingw81
+
+
 
       # Build and Test
       - name: Neovim Version
@@ -58,13 +75,13 @@ jobs:
 
       - name: Configure
         env:
-          CMAKE_BUILD_TYPE: Release
-          CMAKE_GENERATOR: Visual Studio 17 2022
+          CMAKE_BUILD_TYPE: Debug
+          CMAKE_GENERATOR: MinGW Makefiles
         run: >
           cmake -B ./build
           -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
-          -DCMAKE_C_COMPILER=
-          -DCMAKE_CXX_COMPILER=
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++
           -DENABLE_TESTS=ON
           -DCTEST_EXE_ARGS=-tap
 
@@ -76,7 +93,7 @@ jobs:
 #       uses: GabrielBB/xvfb-action@v1 # Required by Linux, no X11 $DISPLAY
 #       with:
 #         working-directory: ${{ github.workspace }}/build
-#         run: ctest --output-on-failure -C Release
+#         run: ctest --output-on-failure -C Debug
 
 
       # Deploy Release Binaries
@@ -93,7 +110,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Windows_Release
+          name: MinGW_Release
           if-no-files-found: ignore
           path: |
             Neovim-Qt-*-x86_64.AppImage
