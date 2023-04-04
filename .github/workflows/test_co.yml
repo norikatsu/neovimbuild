@@ -33,7 +33,7 @@ jobs:
         run: |
           Get-Location
           Get-Command git
-          Get-ChildItem "C:\Program Files\Git\usr"
+          Get-ChildItem "C:\Program Files\Git\usr\bin"
           #          Get-ChildItem patch
 
 
