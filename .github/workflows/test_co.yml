@@ -1,0 +1,39 @@
+# Workflow for generating binaries with reference to neovim-qt
+
+name: test_co_windows
+
+on: 
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Manual Test Win'
+        required: true
+        default: 'defalut'
+
+
+
+jobs:
+  clone_and_neovimQt:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout neovim-qt Repository
+        uses: actions/checkout@v3
+        with:
+          repository: equalsraf/neovim-qt
+          ref: v0.2.17
+#          path: 'neovim-qt'
+
+      - name: Checkout patch Repository
+        uses: actions/checkout@v3
+        with:
+          ref: v0.2.17
+          path: 'patch'
+
+
+      - name: Windows - Command
+        run: |
+          Get-Location
+          Get-ChildItem
+          Get-ChildItem patch
+
+
