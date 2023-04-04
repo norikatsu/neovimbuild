@@ -34,6 +34,7 @@ jobs:
           $Env:PATH = "C:\Program Files\Git\usr\bin"+";"+$Env:PATH
           Copy-Item .\patch\patch\diff_for_v0.2.17.patch .
           cmd /c 'patch -p1 < diff_for_v0.2.17.patch'
+          git status
 
 
 
