@@ -26,7 +26,6 @@ jobs:
       - name: Checkout patch Repository
         uses: actions/checkout@v3
         with:
-          ref: v0.2.17
           path: 'patch'
 
 
