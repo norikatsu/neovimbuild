@@ -35,7 +35,7 @@ jobs:
           $Env:PATH = "C:\Program Files\Git\usr\bin"+";"+$Env:PATH
           Write-Output $Env:PATH
           cp .\patch\patch\diff_for_v0.2.17.patch .
-          patch -p1 < diff_for_v0.2.17.path
+          cmd /c 'patch -p1 < diff_for_v0.2.17.path'
           #Get-Command git
           #Get-ChildItem "C:\Program Files\Git\usr\bin"
           #          Get-ChildItem patch
