@@ -81,8 +81,8 @@ jobs:
         run: >
           cmake -B ./build
           -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
-          -DCMAKE_C_COMPILER=
-          -DCMAKE_CXX_COMPILER=
+
+
 
       - name: Build
         run: cmake --build ${{ github.workspace }}/build
