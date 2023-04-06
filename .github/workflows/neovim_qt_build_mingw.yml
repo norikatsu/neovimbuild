@@ -71,6 +71,10 @@ jobs:
           python -m aqt install 5.15.2 windows desktop win64_mingw81
 
 
+      # Debug code
+      - name: Which cmake
+        run: Get-Command cmake
+
 
       # Build and Test
       - name: Neovim Version
