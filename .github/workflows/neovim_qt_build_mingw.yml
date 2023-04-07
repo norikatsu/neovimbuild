@@ -73,9 +73,10 @@ jobs:
 
       # Debug code
       - name: Which cmake
-        run: Get-Command cmake
-        run: Get-Command gcc
-        run: Get-Command g++
+        run: |
+          Get-Command cmake
+          Get-Command gcc
+          Get-Command g++
 
 
       # Build and Test
